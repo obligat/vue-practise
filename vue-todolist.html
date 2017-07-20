@@ -31,14 +31,14 @@
         data: {
           users: [],
           username: '',
-          age: '',
+          message: '',
           currentIndex: -100
         },
         methods: {
-          addUser: function (username, age) {
-            this.users.push({username, age})
+          addUser: function (username, message) {
+            this.users.push({username, message})
             this.username = '';
-            this.age = '';
+            this.message = '';
           },
           delUser: function (id) {
             if (id == -2) {
@@ -59,11 +59,11 @@
     <div class="form-group ">
       <label for="username">username:</label>
       <input type="text" id="username" class="form-control" v-model="username" placeholder="please input username">
-      <label for="age">age:</label>
-      <input type="text" id="age" class="form-control" v-model="age" placeholder="please input age">
+      <label for="message">message:</label>
+      <input type="text" id="message" class="form-control" v-model="message" placeholder="please input age">
     </div>
     <button type="reset" class="btn btn-primary">RESET</button>
-    <button type="button" class="btn btn-primary" @click="addUser(username,age)">CONFIRM</button>
+    <button type="button" class="btn btn-primary" @click="addUser(username,message)">CONFIRM</button>
     <hr>
     <table class="table table-striped center">
       <caption class="h3 text-info">user info table</caption>
@@ -71,7 +71,7 @@
       <tr>
         <th>index</th>
         <th>username</th>
-        <th>age</th>
+        <th>message</th>
         <th>maul</th>
       </tr>
       </thead>
@@ -79,7 +79,7 @@
       <tr v-for="(item,index) in users">
         <td>{{index+1}}</td>
         <td>{{item.username}}</td>
-        <td>{{item.age}}</td>
+        <td>{{item.message }}</td>
         <td>
           <button type="button" class="btn btn-md btn-primary" data-toggle="modal" data-target="#del"
                   @click="currentIndex = index">DEL
