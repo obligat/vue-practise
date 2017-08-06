@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>slide down</title>
+  <style>
+    .grey {
+      background: #ccc;
+    }
+
+    html {
+      font-size: 100px;
+    }
+
+    html,body{
+      width:100%;
+      overflow: hidden;
+    }
+
+    #box {
+      width: 3rem;
+      margin: auto;
+      border: 1px solid burlywood;
+      font-size:0.16rem;
+      border-radius: 5px;
+    }
+
+    @media screen and (max-device-width: 480px){
+      #box{
+        width:100%;
+      }
+    }
+
+    #box input {
+      line-height:0.3rem;
+      width: 100%;
+      padding: 0.05rem;
+      font-size:0.16rem;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    #box ul {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      padding: 0.1rem;
+    }
+
+    #box ul > li {
+      list-style: none;
+    }
+  </style>
+  <script src="vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+  <script>
+    window.onload = function () {
+
+      new Vue({
+        el: "#box",
+        data: {
+          myData: [],
+          t: '',
+          now: -1
+        },
+        methods: {
+          get: function (e) {
+            if (e.keyCode == 38 || e.keyCode == 40) return;
+
+            if (e.keyCode == 13) {
+              window.open('https://www.baidu.com/s?wd=' + this.t);
+              this.t = '';
+            }
+
+            this.$http
+                .jsonp("https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=" + this.t,
+                    {jsonp: "cb"}).then(function (res) {
+              this.myData = res.data.s;
+            }, function (res) {
+            })
+          },
+          changeDown(){
+            this.now++;
+            if (this.now == this.myData.length) {
+              this.now = -1;
+            }
+            this.t = this.myData[this.now];
+
+          },
+          changeUp(){
+            this.now--;
+            if (this.now == -2) {
+              this.now = this.myData.length - 1;
+            }
+            this.t = this.myData[this.now];
+          }
+        }
+      })
+    }
+  </script>
+</head>
+<body>
+<div id="box">
+  <input type="text" v-model="t" @keyup="get($event)" @keydown.down="changeDown()" @keydown.up.prevent="changeUp()">
+  <ul :style="{display:myData.length == 0?'none':'flex'}">
+    <li v-for="(value,index) in myData" :class="{grey:index==now}">
+      {{value}}
+    </li>
+    <!--<p v-show="myData.length==0">don't have data yet...</p>-->
+  </ul>
+</div>
+<script>
+  let winW = document.documentElement.clientWidth || document.body.clientWidth;
+  let desW = 750;
+  document.documentElement.style.fontSize = (winW / desW) * 100 + 'px';
+</script>
+
+</body>
+</html>
